@@ -184,6 +184,8 @@ Naredil sem tudi svoje senzorje cen v datoteki sensors.yaml čeprav bi lahko upo
 ```
 Za pridobivanje podatkov direktno iz števca, ki mi to omogoča (moral sem zaprositi Elektro, da mi odpre port. Števec (Iskra AM550) je nameščen blizu WiFi dostopne točke) uporabljam P1 meter https://www.homewizard.com/shop/wi-fi-p1-meter/ imam pa še Shelly Pro 3EM https://www.shelly.si/si/merilniki-porabe-energije/71-123-shelly-pro-3em-3-fazni-merilnik.html#/41-tokovniki-120_a.
 
+***************************************************************************************************************************************************************************************
+
 Iz senzorja `sensor.p1_meter_power_phase_3`, ki privzeto meri porabo v W sem naredil senzor `sensor.p1_meter_power_phase_3_w_to_kwh`, ki pretvarja porabo iz W v kWh:
 ![sensor p1_meter_power_phase_3](https://github.com/user-attachments/assets/2a84dd16-7bc1-4f29-bd55-7ab33aad1a84)
 Postopek:
@@ -197,13 +199,82 @@ Zatem označite/izberite kot prikazujejo rdeče puščice. Kjer je modra pušči
 
 
 ***************************************************************************************************************************************************************************************
+
 Sedaj ustvarimo še nov senzor `sensor.p1_meter_phase_3_mesecno_kwh`, ki bo zbiral mesečno porabo električne energije:
 ![P1 meter phase 3-Mesečno-kWh](https://github.com/user-attachments/assets/1a1a633e-acbf-46a1-8e33-0cf0023738a0)
 Izberi `Utility Meter`
 ![Utility Meter](https://github.com/user-attachments/assets/2018862e-8cf0-4762-92f2-9038787a9479)
 Zatem kjer kaže rdeča puščica izberi `mesečno`,kjer kaže modra puščica iberi senzor, ki ga želiš, dodaj ime in klikni `Submit`
+![sensor p1_meter_phase_3_mesecno_kwh](https://github.com/user-attachments/assets/cf14d559-7eea-4091-ad44-6edc1a4e6a44)
 
 Sedaj smo naredili senzor z imenom `sensor.p1_meter_phase_3_mesecno_kwh`, ki ga bomo kasneje uporabljali pri izračunu elektrike.
 
+***************************************************************************************************************************************************************************************
+V `configuration.yaml` datoteko dodamo:
+```yaml
+input_number:
+  faza3_blok1_consumption:
+    name: "Faza 3 Blok 1 Poraba"
+    min: 0
+    max: 10000
+    step: 0.01
+    unit_of_measurement: 'kWh'
+
+  faza3_blok2_consumption:
+    name: "Faza 3 Blok 2 Poraba"
+    min: 0
+    max: 10000
+    step: 0.01
+    unit_of_measurement: 'kWh'
+
+  faza3_blok3_consumption:
+    name: "Faza 3 Blok 3 Poraba"
+    min: 0
+    max: 10000
+    step: 0.01
+    unit_of_measurement: 'kWh'
+
+  faza3_blok4_consumption:
+    name: "Faza 3 Blok 4 Poraba"
+    min: 0
+    max: 10000
+    step: 0.01
+    unit_of_measurement: 'kWh'
+
+  faza3_blok5_consumption:
+    name: "Faza 3 Blok 5 Poraba"
+    min: 0
+    max: 10000
+    step: 0.01
+    unit_of_measurement: 'kWh'
+```
+
+V `automations.yaml` datoteko dodajmo:
+```yaml
+- id: '1739128677653'
+  alias: Spremljanje porabe po blokih faza 3
+  description: ''
+  triggers:
+  - entity_id: sensor.elektro_network_tariff
+    trigger: state
+  conditions: []
+  actions:
+  - target:
+      entity_id: "{% if is_state('sensor.elektro_network_tariff', '1') %}\n  input_number.faza3_blok1_consumption\n{%
+        elif is_state('sensor.elektro_network_tariff', '2') %}\n  input_number.faza3_blok2_consumption\n{%
+        elif is_state('sensor.elektro_network_tariff', '3') %}\n  input_number.faza3_blok3_consumption\n{%
+        elif is_state('sensor.elektro_network_tariff', '4') %}\n  input_number.faza3_blok4_consumption\n{%
+        elif is_state('sensor.elektro_network_tariff', '5') %}\n  input_number.faza3_blok5_consumption\n{%
+        endif %}\n"
+    data:
+      value: '{{ (states(''sensor.p1_meter_phase_3_mesecno_kwh'')) }}
+
+        '
+    action: input_number.set_value
+  mode: single
+```
+
+Če se še spomnimo nam `sensor.elektro_network_tariff` daje podatke kateri blok je trenutno v uporabi. `input_number.faza3_blokX_consumption` so entitete katerim se bo dodajala vrednost.
+***************************************************************************************************************************************************************************************
 
 
