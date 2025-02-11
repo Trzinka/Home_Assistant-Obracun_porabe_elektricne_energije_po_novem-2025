@@ -140,20 +140,22 @@ Iz menija izberite `Integral`:
 ![Integral](https://github.com/user-attachments/assets/0cae4495-64f7-43d5-9ea4-12a5660b6f38)
 Zatem označite/izberite kot prikazujejo rdeče puščice. Kjer je modra puščica izberite senzor, ki meri porabo v W, pod name vpišite ime senzorja, ki ga ustvarjate in za konec še `Submit`:
 ![Integral create](https://github.com/user-attachments/assets/5b2beb10-91fb-4d6e-b6b8-c9630bda2f02)
-********************************************************************************************************************************************************************************************
+***************************************************************************************************************************************************************************************
 Sedaj ustvarimo še nov senzor `sensor.p1_meter_phase_3_mesecno_kwh`, ki bo zbiral mesečno porabo električne energije:
 ![P1 meter phase 3-Mesečno-kWh](https://github.com/user-attachments/assets/1a1a633e-acbf-46a1-8e33-0cf0023738a0)
 Izberi `Utility Meter`
 ![Utility Meter](https://github.com/user-attachments/assets/2018862e-8cf0-4762-92f2-9038787a9479)
 Zatem kjer kaže rdeča puščica izberi `mesečno`,kjer kaže modra puščica iberi senzor, ki ga želiš, dodaj ime in klikni `Submit`
 
-
-=============================================================================================================================================================================================
-Glede na zgodovino porabe v zimskem času (gretje na elektriko "IR paneli" + sanitarna voda "bojler")
+Sedaj smo naredili senzor z imenom `sensor.p1_meter_phase_3_mesecno_kwh`, ki ga bomo kasneje uporabljali pri izračunu elektrike.
+========================================================================================================================================================================================
+Glede na zgodovino porabe moči v zimskem času (gretje na elektriko "IR paneli" + sanitarna voda "bojler")
 ![202501-Elektro graf poraba MOČ](https://github.com/user-attachments/assets/1bab80e5-1a41-484c-90b4-4b85dff53b52)
 
-na te ocene blokov ni kaj spreminjati.
+na te ocene dogovorjene moči po blokih Elektra si ne upam kaj spreminjati, ker se hitro zgodi trenutek nepazljivosti in se zgodi kot prikazuje zgornja slika.
 ![Moj elektro-Bloki](https://github.com/user-attachments/assets/958c90fb-9e70-47fe-b03d-857318a3b505)
-=============================================================================================================================================================================================
+
+Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki bi preprečevala istočasen vklop več naprav na enkrat (vse večje porabnike imam opremljene s stikali, ki merijo porabo električne energije) a po pravici ne vem kje začeti in čemu dati prednost tako, da ne preostane nič drugega kot osebna pozornost, da ne vklopim več istočasnih velikih porabnikov električne energije.
+========================================================================================================================================================================================
 
 
