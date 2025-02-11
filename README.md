@@ -3,8 +3,61 @@ Uporabljam nasledne add-on:
 - https://github.com/frlequ/home-assistant-network-tariff
 - https://github.com/frlequ/energy-and-tariff-costs
 
-poleg teh še vizualni add.on:
+Naredil sem dva senzorja v datoteki sensors.yaml. Če hočete dobiti malo več podatkov oziroma v lepši obliki:
+```yaml
+#============================================
+# Delovni dan
+#============================================
+  - platform: template
+    sensors:
+      delovni_dan:
+        friendly_name: "Dela prosti dan"
+        value_template: >
+          {% if state_attr('sensor.elektro_network_tariff', 'holiday') %}
+            Da
+          {% else %}
+            Ne
+          {% endif %}
+        icon_template: >
+          {% if state_attr('sensor.elektro_network_tariff', 'holiday') %}
+            mdi:calendar-check
+          {% else %}
+            mdi:calendar-remove
+          {% endif %}
+        unique_id: 3115d14c-88a2-4580-af6c-b8ccfacbe4bb
+```
+
+in še senzor:
+```yaml
+#============================================
+# Tarifi
+#============================================
+  - platform: template
+    sensors:
+      tarifi:
+        friendly_name: "Tarifi"
+        value_template: >
+          {% set current_month = now().month %}
+          {% if current_month >= 11 or current_month <= 2 %}
+            Visoka tarifa
+          {% else %}
+            Nizka tarifa
+          {% endif %}
+        unique_id: c9214188-d611-400c-99df-3b1ce45622ae
+```
+
+poleg teh uporabljam še vizualni add.on:
 - https://github.com/frlequ/network-tariff-card
+
+========================================================================================================================================================================================
+Glede na zgodovino porabe moči v zimskem času (gretje na elektriko "IR paneli" + sanitarna voda "bojler")
+![202501-Elektro graf poraba MOČ](https://github.com/user-attachments/assets/1bab80e5-1a41-484c-90b4-4b85dff53b52)
+
+na te ocene dogovorjene moči po blokih Elektra si ne upam kaj spreminjati, ker se hitro zgodi trenutek nepazljivosti in se zgodi kot prikazuje zgornja slika.
+![Moj elektro-Bloki](https://github.com/user-attachments/assets/958c90fb-9e70-47fe-b03d-857318a3b505)
+
+Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki bi preprečevala istočasen vklop več naprav na enkrat (vse večje porabnike imam opremljene s stikali, ki merijo porabo električne energije) a po pravici ne vem kje začeti in čemu dati prednost tako, da ne preostane nič drugega kot osebna pozornost, da ne vklopim več istočasnih velikih porabnikov električne energije.
+========================================================================================================================================================================================
 
 `Moj elektro nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si:`
 ![Moj elektro](https://github.com/user-attachments/assets/54ea62ce-c0a1-4322-8426-b5cf66451239)
@@ -15,7 +68,7 @@ poleg teh še vizualni add.on:
 `Energy and tariff costs nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si. Cene posameznih postavk lahko spremenite glede na cene vašega dobavitelja električne energije`
 ![Energy cost](https://github.com/user-attachments/assets/56db2565-f444-4841-8516-da3adc7b556b)
 
-Naredil sem svoje senzorje cen v datoteki sensors.yaml čeprav bi lahko uporabljal add-on https://github.com/frlequ/energy-and-tariff-costs:
+Naredil sem svoje senzorje cen v datoteki sensors.yaml čeprav bi lahko uporabljal add-on https://github.com/frlequ/energy-and-tariff-costs oziroma jih delno uporabljam:
 ```yaml
 #============================================
 # Cene
@@ -140,6 +193,8 @@ Iz menija izberite `Integral`:
 ![Integral](https://github.com/user-attachments/assets/0cae4495-64f7-43d5-9ea4-12a5660b6f38)
 Zatem označite/izberite kot prikazujejo rdeče puščice. Kjer je modra puščica izberite senzor, ki meri porabo v W, pod name vpišite ime senzorja, ki ga ustvarjate in za konec še `Submit`:
 ![Integral create](https://github.com/user-attachments/assets/5b2beb10-91fb-4d6e-b6b8-c9630bda2f02)
+
+
 ***************************************************************************************************************************************************************************************
 Sedaj ustvarimo še nov senzor `sensor.p1_meter_phase_3_mesecno_kwh`, ki bo zbiral mesečno porabo električne energije:
 ![P1 meter phase 3-Mesečno-kWh](https://github.com/user-attachments/assets/1a1a633e-acbf-46a1-8e33-0cf0023738a0)
@@ -148,14 +203,6 @@ Izberi `Utility Meter`
 Zatem kjer kaže rdeča puščica izberi `mesečno`,kjer kaže modra puščica iberi senzor, ki ga želiš, dodaj ime in klikni `Submit`
 
 Sedaj smo naredili senzor z imenom `sensor.p1_meter_phase_3_mesecno_kwh`, ki ga bomo kasneje uporabljali pri izračunu elektrike.
-========================================================================================================================================================================================
-Glede na zgodovino porabe moči v zimskem času (gretje na elektriko "IR paneli" + sanitarna voda "bojler")
-![202501-Elektro graf poraba MOČ](https://github.com/user-attachments/assets/1bab80e5-1a41-484c-90b4-4b85dff53b52)
 
-na te ocene dogovorjene moči po blokih Elektra si ne upam kaj spreminjati, ker se hitro zgodi trenutek nepazljivosti in se zgodi kot prikazuje zgornja slika.
-![Moj elektro-Bloki](https://github.com/user-attachments/assets/958c90fb-9e70-47fe-b03d-857318a3b505)
-
-Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki bi preprečevala istočasen vklop več naprav na enkrat (vse večje porabnike imam opremljene s stikali, ki merijo porabo električne energije) a po pravici ne vem kje začeti in čemu dati prednost tako, da ne preostane nič drugega kot osebna pozornost, da ne vklopim več istočasnih velikih porabnikov električne energije.
-========================================================================================================================================================================================
 
 
