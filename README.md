@@ -210,7 +210,7 @@ Zatem kjer kaže rdeča puščica izberi `mesečno`,kjer kaže modra puščica i
 Sedaj smo naredili senzor z imenom `sensor.p1_meter_phase_3_mesecno_kwh`, ki ga bomo kasneje uporabljali pri izračunu elektrike.
 
 ***************************************************************************************************************************************************************************************
-`# ZA TA DEL NISEM PREPRIČAN, DA JE PRAVILNO NAPISAN1`
+# ZA TA DEL NISEM PREPRIČAN, DA JE PRAVILNO NAPISAN!
 ***************************************************************************************************************************************************************************************
 V `configuration.yaml` datoteko dodamo:
 ```yaml
