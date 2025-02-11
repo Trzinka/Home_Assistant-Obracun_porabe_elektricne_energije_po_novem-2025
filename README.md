@@ -187,6 +187,7 @@ Za pridobivanje podatkov direktno iz števca, ki mi to omogoča (moral sem zapro
 Iz senzorja `sensor.p1_meter_power_phase_3`, ki privzeto meri porabo v W sem naredil senzor `sensor.p1_meter_power_phase_3_w_to_kwh`, ki pretvarja porabo iz W v kWh:
 ![sensor p1_meter_power_phase_3](https://github.com/user-attachments/assets/2a84dd16-7bc1-4f29-bd55-7ab33aad1a84)
 Postopek:
+
 Pod `Settings` izberite `Devices & services` in nato `Helpers` ter kliknite na gumb `Create helper` kot prikazuje slika:
 ![Create helper](https://github.com/user-attachments/assets/b95896c7-876b-437a-bbec-afc9ed6d7be8)
 Iz menija izberite `Integral`:
