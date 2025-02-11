@@ -6,16 +6,16 @@ Uporabljam nasledne add-on:
 poleg teh še vizualni add.on:
 - https://github.com/frlequ/network-tariff-card
 
-`Moj elektro nudi naslednje podatke:`
+`Moj elektro nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si:`
 ![Moj elektro](https://github.com/user-attachments/assets/54ea62ce-c0a1-4322-8426-b5cf66451239)
 
-`Home assistant network tariff nudi naslednje podatke:`
+`Home assistant network tariff nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si:`
 ![sensor elektro_network_tariff](https://github.com/user-attachments/assets/e5aea75c-0123-42f3-a076-4e2d0d57814f)
 
-`Energy and tariff costs nudi naslednje podatke`
+`Energy and tariff costs nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si. Cene posameznih postavk lahko spremenite glede na cene vašega dobavitelja električne energije`
 ![Energy cost](https://github.com/user-attachments/assets/56db2565-f444-4841-8516-da3adc7b556b)
 
-Naredil sem svoje senzorje cen v datoteki sensors.yaml:
+Naredil sem svoje senzorje cen v datoteki sensors.yaml čeprav bi lahko uporabljal add-on https://github.com/frlequ/energy-and-tariff-costs:
 ```yaml
 #============================================
 # Cene
