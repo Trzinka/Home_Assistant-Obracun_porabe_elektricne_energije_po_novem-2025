@@ -144,3 +144,12 @@ Iz menija izberite `Integral`:
 
 Zatem označite/izberite kot prikazujejo rdeče puščice. Kjer je modra puščica izberite senzor, ki meri porabo v W, pod name vpišite ime senzorja, ki ga ustvarjate in za konec še `Submit`:
 ![Integral create](https://github.com/user-attachments/assets/5b2beb10-91fb-4d6e-b6b8-c9630bda2f02)
+=============================================================================================================================================================================================
+Glede na zgodovino porabe v zimskem času (gretje na elektriko "IR paneli" + sanitarna voda "bojler")
+![202501-Elektro graf poraba MOČ](https://github.com/user-attachments/assets/1bab80e5-1a41-484c-90b4-4b85dff53b52)
+
+na te ocene blokov ni kaj spreminjati.
+![Moj elektro-Bloki](https://github.com/user-attachments/assets/958c90fb-9e70-47fe-b03d-857318a3b505)
+=============================================================================================================================================================================================
+
+
