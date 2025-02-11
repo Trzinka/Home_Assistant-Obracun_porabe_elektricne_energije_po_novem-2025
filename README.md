@@ -58,16 +58,16 @@ na te ocene dogovorjene moči po blokih Elektra si ne upam kaj spreminjati, ker 
 Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki bi preprečevala istočasen vklop več naprav na enkrat (vse večje porabnike imam opremljene s stikali, ki merijo porabo električne energije) a po pravici ne vem kje začeti in čemu dati prednost tako, da ne preostane nič drugega kot osebna pozornost, da ne vklopim več istočasnih velikih porabnikov električne energije.
 ***************************************************************************************************************************************************************************************
 
-`Moj elektro nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si:`
+`Moj elektro dodatek nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si. Podatki v kWh so za en dan nazaj oziroma so včerajšnji:`
 ![Moj elektro](https://github.com/user-attachments/assets/54ea62ce-c0a1-4322-8426-b5cf66451239)
 
-`Home assistant network tariff nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si:`
+`Home assistant network tariff dodatek nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si:`
 ![sensor elektro_network_tariff](https://github.com/user-attachments/assets/e5aea75c-0123-42f3-a076-4e2d0d57814f)
 
-`Energy and tariff costs nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si. Cene posameznih postavk lahko spremenite glede na cene vašega dobavitelja električne energije`
+`Energy and tariff costs dodatek nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si. Cene posameznih postavk lahko spremenite glede na cene vašega dobavitelja električne energije`
 ![Energy cost](https://github.com/user-attachments/assets/56db2565-f444-4841-8516-da3adc7b556b)
 
-Naredil sem svoje senzorje cen v datoteki sensors.yaml čeprav bi lahko uporabljal add-on https://github.com/frlequ/energy-and-tariff-costs oziroma jih delno uporabljam:
+Naredil sem tudi svoje senzorje cen v datoteki sensors.yaml čeprav bi lahko uporabljal add-on https://github.com/frlequ/energy-and-tariff-costs oziroma jih kot boste kasneje videli delno uporabljam:
 ```yaml
 #============================================
 # Cene
@@ -182,6 +182,7 @@ Naredil sem svoje senzorje cen v datoteki sensors.yaml čeprav bi lahko uporablj
         unit_of_measurement: EUR
         unique_id: 06476065-a9e7-40fe-8deb-1e6504a19ada
 ```
+Za pridobivanje podatkov direktno iz števca, ki mi to omogoča (moral sem zaprositi Elektro, da mi odpre port. Števec (Iskra AM550) je nameščen blizu WiFi dostopne točke) uporabljam P1 meter https://www.homewizard.com/shop/wi-fi-p1-meter/ imam pa še Shelly Pro 3EM https://www.shelly.si/si/merilniki-porabe-energije/71-123-shelly-pro-3em-3-fazni-merilnik.html#/41-tokovniki-120_a.
 
 Iz senzorja `sensor.p1_meter_power_phase_3`, ki privzeto meri porabo v W sem naredil senzor `sensor.p1_meter_power_phase_3_w_to_kwh`, ki pretvarja porabo iz W v kWh:
 ![sensor p1_meter_power_phase_3](https://github.com/user-attachments/assets/2a84dd16-7bc1-4f29-bd55-7ab33aad1a84)
