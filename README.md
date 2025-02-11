@@ -15,7 +15,7 @@ poleg teh še vizualni add.on:
 `Energy and tariff costs nudi naslednje podatke`
 ![Energy cost](https://github.com/user-attachments/assets/56db2565-f444-4841-8516-da3adc7b556b)
 
-Istočasno sem naredil svoje senzorje v datoteki sensors.yaml:
+Naredil sem svoje senzorje cen v datoteki sensors.yaml:
 ```yaml
 #============================================
 # Cene
@@ -130,3 +130,16 @@ Istočasno sem naredil svoje senzorje v datoteki sensors.yaml:
         unit_of_measurement: EUR
         unique_id: 06476065-a9e7-40fe-8deb-1e6504a19ada
 ```
+
+Iz senzorja `sensor.p1_meter_power_phase_3`, ki privzeto meri porabo v W sem naredil senzor `sensor.p1_meter_power_phase_3_w_to_kwh`, ki pretvarja porabo iz W v kWh:
+![sensor p1_meter_power_phase_3](https://github.com/user-attachments/assets/2a84dd16-7bc1-4f29-bd55-7ab33aad1a84)
+
+Postopek:
+Pod `Settings` izberite `Devices & services` in nato `Helpers` ter kliknite na gumb `Create helper` kot prikazuje slika:
+![Create helper](https://github.com/user-attachments/assets/b95896c7-876b-437a-bbec-afc9ed6d7be8)
+
+Iz menija izberite `Integral`:
+![Integral](https://github.com/user-attachments/assets/0cae4495-64f7-43d5-9ea4-12a5660b6f38)
+
+Zatem označite/izberite kot prikazujejo rdeče puščice. Kjer je modra puščica izberite senzor, ki meri porabo v W, pod name vpišite ime senzorja, ki ga ustvarjate in za konec še `Submit`:
+![Integral create](https://github.com/user-attachments/assets/5b2beb10-91fb-4d6e-b6b8-c9630bda2f02)
