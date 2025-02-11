@@ -188,7 +188,7 @@ Za pridobivanje podatkov direktno iz števca, ki mi to omogoča (moral sem zapro
 
 Iz senzorja `sensor.p1_meter_power_phase_3`, ki privzeto meri porabo v W sem naredil senzor `sensor.p1_meter_power_phase_3_w_to_kwh`, ki pretvarja porabo iz W v kWh:
 ![sensor p1_meter_power_phase_3](https://github.com/user-attachments/assets/2a84dd16-7bc1-4f29-bd55-7ab33aad1a84)
-Postopek:
+# Postopek:
 
 Pod `Settings` izberite `Devices & services` in nato `Helpers` ter kliknite na gumb `Create helper` kot prikazuje slika:
 ![Create helper](https://github.com/user-attachments/assets/b95896c7-876b-437a-bbec-afc9ed6d7be8)
@@ -279,4 +279,206 @@ V `automations.yaml` datoteko dodajmo:
 Če se še spomnimo nam `sensor.elektro_network_tariff` daje podatke kateri blok je trenutno v uporabi. `input_number.faza3_blokX_consumption` so entitete katerim se bo dodajala vrednost.
 ***************************************************************************************************************************************************************************************
 
+# Sedaj pa še izračun:
+V datoteko sensors.yaml dodajte:
+```yaml
+#=========================================================================================================================================================
+#                          Obračun elektrike
+#=========================================================================================================================================================
+#============================================
+# Izračun stroška električne energije
+#============================================ 
+  - platform: template
+    sensors:
+      skupaj_izracun_stroska_elektricne_energije:
+        friendly_name: "Skupaj izračun stroška električne energije"
+        value_template: >
+          {{ (states('sensor.cena_elektricne_energije_et') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "157cc9e7-fa6b-4961-b971-b2a5107aa273"
+#============================================
+# Izračun stroška omrežnine za EE sistem
+#============================================
+  - platform: template
+    sensors:
+      izracun_stroska_dogovorjene_moci_casovni_blok1:
+        friendly_name: "Izračun stroška dogovorjene moči za časovni blok 1"
+        value_template: >
+          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_1') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_1') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "a379725a-9627-43da-b2f3-74d5a4d1808b"
 
+  - platform: template
+    sensors:
+      izracun_stroska_dogovorjene_moci_casovni_blok2:
+        friendly_name: "Izračun stroška dogovorjene moči za časovni blok 2"
+        value_template: >
+          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_2') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_2') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "b1cde06a-4acc-47d3-a49f-265f683f366f"
+
+  - platform: template
+    sensors:
+      izracun_stroska_dogovorjene_moci_casovni_blok3:
+        friendly_name: "Izračun stroška dogovorjene moči za časovni blok 3"
+        value_template: >
+          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_3') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_3') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "8257ea99-54ea-488d-ae05-453bf55e2a4c"
+
+  - platform: template
+    sensors:
+      izracun_stroska_dogovorjene_moci_casovni_blok4:
+        friendly_name: "Izračun stroška dogovorjene moči za časovni blok 4"
+        value_template: >
+          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_4') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_4') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "df8d0f0d-4113-4804-b146-c585b60c965d"
+
+  - platform: template
+    sensors:
+      izracun_stroska_dogovorjene_moci_casovni_blok5:
+        friendly_name: "Izračun stroška dogovorjene moči za časovni blok 5"
+        value_template: >
+          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_5') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_5') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "0cf92b56-cbb2-46b9-a81d-6eced4160e4e"
+#===
+# SKUPAJ
+#===
+  - platform: template
+    sensors:
+      skupaj_izracun_stroska_dogovorjene_moci:
+        friendly_name: "Skupaj izračun stroška dogovorjene moči"
+        value_template: >
+          {{ (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok1') | float(default=0)) + (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok2') | float(default=0)) + (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok3') | float(default=0)) + (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok4') | float(default=0)) + (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok5') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "7d475559-ff86-4ef5-93b6-c3ffb1847a24"        
+ #=================  
+  - platform: template
+    sensors:
+      izracun_stroska_prevzete_ee_casovni_blok1:
+        friendly_name: "Izračun stroška prevzete EE za časovni blok 1"
+        value_template: >
+          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_1') | float(default=0)) * (states('input_number.faza3_blok1_consumption') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "b8677233-fd2b-4d70-96d4-5a0015e1f63f"
+
+  - platform: template
+    sensors:
+      izracun_stroska_prevzete_ee_casovni_blok2:
+        friendly_name: "Izračun stroška prevzete EE za časovni blok 2"
+        value_template: >
+          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_2') | float(default=0)) * (states('input_number.faza3_blok2_consumption') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "22653dee-7dff-461a-a05a-ff6093b915cb"
+
+  - platform: template
+    sensors:
+      izracun_stroska_prevzete_ee_casovni_blok3:
+        friendly_name: "Izračun stroška prevzete EE za časovni blok 3"
+        value_template: >
+          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_3') | float(default=0)) * (states('input_number.faza3_blok3_consumption') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "7a8d080d-e8db-47e4-9341-79d66f49177a"
+
+  - platform: template
+    sensors:
+      izracun_stroska_prevzete_ee_casovni_blok4:
+        friendly_name: "Izračun stroška prevzete EE za časovni blok 4"
+        value_template: >
+          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_4') | float(default=0)) * (states('input_number.faza3_blok4_consumption') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "962ae12e-2784-4600-a775-4afeda115191"
+
+  - platform: template
+    sensors:
+      izracun_stroska_prevzete_ee_casovni_blok5:
+        friendly_name: "Izračun stroška prevzete EE za časovni blok 5"
+        value_template: >
+          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_5') | float(default=0)) * (states('input_number.faza3_blok5_consumption') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "16be39c0-048a-40c3-9f59-bee2237b275c"
+#===
+# SKUPAJ
+#===
+  - platform: template
+    sensors:
+      skupaj_izracun_stroska_prevzete_ee:
+        friendly_name: "Skupaj izračun stroška prevzete EE"
+        value_template: >
+          {{ (states('sensor.izracun_stroska_prevzete_ee_casovni_blok1') | float(default=0)) + (states('sensor.izracun_stroska_prevzete_ee_casovni_blok2') | float(default=0)) + (states('sensor.izracun_stroska_prevzete_ee_casovni_blok3') | float(default=0)) + (states('sensor.izracun_stroska_prevzete_ee_casovni_blok4') | float(default=0)) + (states('sensor.izracun_stroska_prevzete_ee_casovni_blok5') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "373340f1-c286-4b84-950c-55e3de69acfe" 
+#============================================
+# Izračun stroška prispevkov in ostalih dajatev
+#============================================
+      izracun_stroska_prispevka_za_delovanje_operaterja_trga:
+        friendly_name: "Izračun stroška prispevka za delovanje operaterja trga"
+        value_template: >
+          {{ (states('cena_prispevka_za_delovanje_operaterja_trga') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "01357d12-b7e9-4b21-b54d-022c059a8811"
+
+      izracun_stroska_prispevka_za_energetsko_ucinkovitost:
+        friendly_name: "Izračun stroška prispevka za energetsko učinkovitost"
+        value_template: >
+          {{ (states('sensor.cena_prispevka_za_energetsko_ucinkovitost') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "470278cf-f5b1-4566-b14a-3637e1197bfb"
+
+      izracun_stroska_prispevka_za_spte_in_ove:
+        friendly_name: "Izračun stroška prispevka za SPTE in OVE"
+        value_template: >
+          {{ (states('sensor.cena_prispevka_za_spte_in_ove') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_1') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "c3a77213-c751-496b-998f-8c3b1782c4c3"
+#===
+# SKUPAJ
+#===
+      skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev:
+        friendly_name: "Skupaj izračun stroška prispevkov in ostalih dajatev"
+        value_template: >
+          {{ (states('sensor.izracun_stroska_prispevka_za_delovanje_operaterja_trga') | float(default=0)) + (states('sensor.izracun_stroska_prispevka_za_energetsko_ucinkovitost') | float(default=0)) + (states('sensor.izracun_stroska_prispevka_za_spte_in_ove') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "620071a0-8057-4cc0-89bd-7e4c9fe3f44f"
+#============================================
+# Izračun stroška trošarine
+#============================================
+      skupaj_izracun_stroska_trosarine:
+        friendly_name: "Skupaj izračun stroška trošarine"
+        value_template: >
+          {{ (states('sensor.cena_trosarine') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "c4d265d9-c7ce-478d-9f16-8402d14e61cb"
+#============================================
+# Izračun stroška storitve pogodbenega računa
+#============================================
+      skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna:
+        friendly_name: "Skupaj izračun stroška storitev pogodbenega računa"
+        value_template: >
+          {{ (states('sensor.cena_jederske_energije') | float(default=0)) + (states('sensor.cena_pavsalnih_stroskov') | float(default=0)) - (states('sensor.cena_e_popusta') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "a15e8c65-ac34-4e68-ba1f-81d2052291e8"          
+#============================================
+# SKUPAJ IZRAČUN
+#============================================
+      skupaj_izracun_stroskov:
+        friendly_name: "Skupaj izračun stroškov"
+        value_template: >
+          {{ (states('skupaj_izracun_stroska_elektricne_energije') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_dogovorjene_moci') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_prevzete_ee') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_trosarine') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna') | float(default=0)) }}
+        unit_of_measurement: "EUR"
+        unique_id: "c88ba7d9-5e8b-467b-bc50-6c1e452f2c8c"
+```
+Izgled kartice:
+![Ha-Elektrika](https://github.com/user-attachments/assets/07a0f281-f385-45f2-adf8-0b829fd11cac)
+
+in še te, ki trenutno kaže podatke malo narobe, ker sem entitete dodajal v obratnem vrstnem redu in še to, da niso bile vse narejene isti dan. (Seveda če sem naredil tisti del pravilno v katerega nisem prepričan, ker sem si pomagal z ChatGPT)
+![Izračun porabe](https://github.com/user-attachments/assets/d04696ca-bbc9-4c59-81c4-b8f10af41a23)
+
+
+
+Zahvaljujem se frlequ https://github.com/frlequ za dodatke! Za vse ki mu želijo donirati https://buymeacoffee.com/frlequ.
+
+p.s. In še nekaj za vse tiste, ki imate morda preveč časa in ne veste kaj bi z njim! Lotite se izdelave Floor-plan kartice:
+![20250211-Ha-Fp](https://github.com/user-attachments/assets/dfd50763-70ca-4114-92f7-af82f2ed675a)
