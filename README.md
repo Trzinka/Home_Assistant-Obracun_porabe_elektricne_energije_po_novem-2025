@@ -1,3 +1,16 @@
+V datoteki `configuration.yaml` zaradi boljše preglednosti razčlenite datoteko in vpišite v korenske imeniku naredite ustrezne datoteke:
+```yaml
+utility_meter: !include utility_meter.yaml
+automation: !include automations.yaml
+sensor: !include sensors.yaml
+```
+
+ali pa tako kot imam jaz ustvarite mapo `share` in v njej naredite mapo `sensors` ter v njej poljubno poimenujte *.yaml datoteke.
+```yaml
+sensor: !include_dir_merge_list share/sensors/
+```
+![Mapa sensors](https://github.com/user-attachments/assets/00a0f1b5-1c65-4c7d-96d2-643dc7ea3cf3)
+
 Uporabljam nasledne add-on:
 - https://github.com/frlequ/homeassistant-mojelektro
 - https://github.com/frlequ/home-assistant-network-tariff
