@@ -1,3 +1,5 @@
+# Zadeva še ni preverjena
+
 V datoteki `configuration.yaml` zaradi boljše preglednosti razčlenite datoteko in vpišite v korenske imeniku naredite ustrezne datoteke:
 ```yaml
 utility_meter: !include utility_meter.yaml
