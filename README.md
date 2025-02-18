@@ -80,7 +80,7 @@ Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki
 `Energy and tariff costs dodatek nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si. Cene posameznih postavk lahko spremenite glede na cene vašega dobavitelja električne energije`
 ![Energy cost](https://github.com/user-attachments/assets/56db2565-f444-4841-8516-da3adc7b556b)
 
-Naredil sem tudi svoje senzorje cen v datoteki sensors.yaml čeprav bi lahko uporabljal add-on https://github.com/frlequ/energy-and-tariff-costs oziroma jih kot boste kasneje videli delno uporabljam:
+Naredil sem tudi svoje senzorje cen v datoteki elektrika_cenik.yaml (mapa `share` v mapi `sensors` glej prvo sliko) čeprav bi lahko uporabljal add-on https://github.com/frlequ/energy-and-tariff-costs oziroma jih kot boste kasneje videli delno uporabljam:
 ```yaml
 #============================================
 # Cene
@@ -554,12 +554,36 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       skupaj_izracun_stroskov:
         friendly_name: "Skupaj izračun stroškov"
         value_template: >
-          {{ (states('sensor.skupaj_izracun_stroska_elektricne_energije') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_dogovorjene_moci') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_prevzete_ee') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_trosarine') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna') | float(default=0)) }}
+          {{ (states('sensor.skupaj_izracun_stroska_elektricne_energije') | float(default=0)) +
+              (states('sensor.skupaj_izracun_stroska_dogovorjene_moci') | float(default=0)) +
+              (states('sensor.skupaj_izracun_stroska_prevzete_ee') | float(default=0)) +
+              (states('sensor.skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev') | float(default=0)) +
+              (states('sensor.skupaj_izracun_stroska_trosarine') | float(default=0)) +
+              (states('sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna') | float(default=0)) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "c88ba7d9-5e8b-467b-bc50-6c1e452f2c8c"
-
 ```
+
+![20250218-Energija](https://github.com/user-attachments/assets/68be9c42-b88c-41a4-b5c8-509d7e3e45ad)
+Če želite videti stroške porabe električne moči v Energy (zgornja slika)
+dodajte v datoteko `elektrika_obracun.yaml`
+```yaml
+#============================================
+# SKUPAJ IZRAČUN ZA ENERGIJO LOVELACE KARTICO
+#============================================
+      skupaj_izracun_samo_energija:
+        friendly_name: "Skupaj izračun samo energija"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
+        value_template: >
+          {{ (states('sensor.cena_elektricne_energije_et') | float(default=0)) + 
+              (states('sensor.cena_prispevka_za_delovanje_operaterja_trga') | float(default=0)) + 
+              (states('sensor.cena_prispevka_za_energetsko_ucinkovitost') | float(default=0)) + 
+              (states('sensor.cena_trosarine') | float(default=0)) }}
+        unique_id: 92d6a7a2-4566-4864-b1f0-6dabad414f6c
+```
+
 Izgled kartice:
 ![Ha-Elektrika](https://github.com/user-attachments/assets/07a0f281-f385-45f2-adf8-0b829fd11cac)
 
@@ -567,7 +591,81 @@ in še te, ki trenutno kaže podatke porabe po fazah, blokih in skupno.
 
 ![20250218-Poraba elektrike](https://github.com/user-attachments/assets/b3e5cc94-22f0-4801-ad6f-904d1a61a5f0)
 
-
+še koda kartice:
+```yaml
+type: horizontal-stack
+cards:
+  - type: vertical-stack
+    cards:
+      - type: tile
+        entity: sensor.tarife_p1_meter_skupaj_mesecno_1
+        icon: mdi:transmission-tower
+        color: red
+      - type: tile
+        entity: sensor.tarife_p1_meter_skupaj_mesecno_2
+        icon: mdi:transmission-tower
+        color: orange
+      - type: tile
+        entity: sensor.tarife_p1_meter_skupaj_mesecno_3
+        icon: mdi:transmission-tower
+        color: yellow
+      - type: tile
+        entity: sensor.tarife_p1_meter_skupaj_mesecno_4
+        icon: mdi:transmission-tower
+        color: blue-grey
+      - type: tile
+        entity: sensor.tarife_p1_meter_skupaj_mesecno_5
+        icon: mdi:transmission-tower
+        color: green
+    title: Skupaj
+  - type: vertical-stack
+    cards:
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza2_mesecno_1
+        icon: mdi:transmission-tower
+        color: red
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza2_mesecno_2
+        icon: mdi:transmission-tower
+        color: orange
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza2_mesecno_3
+        icon: mdi:transmission-tower
+        color: yellow
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza2_mesecno_4
+        icon: mdi:transmission-tower
+        color: blue-grey
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza2_mesecno_5
+        icon: mdi:transmission-tower
+        color: green
+    title: Faza 2
+  - type: vertical-stack
+    cards:
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza3_mesecno_1
+        icon: mdi:transmission-tower
+        color: red
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza3_mesecno_2
+        icon: mdi:transmission-tower
+        color: orange
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza3_mesecno_3
+        icon: mdi:transmission-tower
+        color: yellow
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza3_mesecno_4
+        icon: mdi:transmission-tower
+        color: blue-grey
+      - type: tile
+        entity: sensor.tarife_p1_meter_faza3_mesecno_5
+        icon: mdi:transmission-tower
+        color: green
+    title: Faza 3
+title: Test
+```
 
 Zahvaljujem se Blažu Česnu, ki mi je nesebično nudil pomoč in frlequ https://github.com/frlequ za dodatke! Za vse ki mu želijo donirati https://buymeacoffee.com/frlequ.
 
