@@ -222,78 +222,143 @@ Zatem kjer kaže rdeča puščica izberi `mesečno`,kjer kaže modra puščica i
 
 Sedaj smo naredili senzor z imenom `sensor.p1_meter_phase_3_mesecno_kwh`, ki ga bomo kasneje uporabljali pri izračunu elektrike.
 
-***************************************************************************************************************************************************************************************
-# ZA TA DEL NISEM PREPRIČAN, DA JE PRAVILNO NAPISAN!
-***************************************************************************************************************************************************************************************
-V `configuration.yaml` datoteko dodamo:
+V `utility_meter.yaml` datoteko dodamo:
 ```yaml
-input_number:
-  faza3_blok1_consumption:
-    name: "Faza 3 Blok 1 Poraba"
-    min: 0
-    max: 10000
-    step: 0.01
-    unit_of_measurement: 'kWh'
-
-  faza3_blok2_consumption:
-    name: "Faza 3 Blok 2 Poraba"
-    min: 0
-    max: 10000
-    step: 0.01
-    unit_of_measurement: 'kWh'
-
-  faza3_blok3_consumption:
-    name: "Faza 3 Blok 3 Poraba"
-    min: 0
-    max: 10000
-    step: 0.01
-    unit_of_measurement: 'kWh'
-
-  faza3_blok4_consumption:
-    name: "Faza 3 Blok 4 Poraba"
-    min: 0
-    max: 10000
-    step: 0.01
-    unit_of_measurement: 'kWh'
-
-  faza3_blok5_consumption:
-    name: "Faza 3 Blok 5 Poraba"
-    min: 0
-    max: 10000
-    step: 0.01
-    unit_of_measurement: 'kWh'
+#########################################
+# BLOKI/TARIFE
+##########################################
+tarife_p1_meter_skupaj_mesecno:
+  name: Mesečna poraba P1 meter skupaj elektrike tarife
+  source: sensor.p1_meter_power_w_to_kwh
+  cycle: monthly
+  tariffs: 
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+tarife_p1_meter_faza1_mesecno:
+  name: Mesečna poraba P1 meter faza 1 elektrike tarife
+  source: sensor.p1_meter_power_phase_1_w_to_kwh
+  cycle: monthly
+  tariffs: 
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+tarife_p1_meter_faza2_mesecno:
+  name: Mesečna poraba P1 meter faza 2 elektrike tarife
+  source: sensor.p1_meter_power_phase_2_w_to_kwh
+  cycle: monthly
+  tariffs: 
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+tarife_p1_meter_faza3_mesecno:
+  name: Mesečna poraba P1 meter faza 3 elektrike tarife
+  source: sensor.p1_meter_power_phase_3_w_to_kwh
+  cycle: monthly
+  tariffs: 
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
 ```
 
 V `automations.yaml` datoteko dodajmo:
 ```yaml
-- id: '1739128677653'
-  alias: Spremljanje porabe po blokih faza 3
+- id: '1739795608260'
+  alias: Izbira_tarif_blokov
   description: ''
-  triggers:
-  - entity_id: sensor.elektro_network_tariff
-    trigger: state
-  conditions: []
-  actions:
-  - target:
-      entity_id: "{% if is_state('sensor.elektro_network_tariff', '1') %}\n  input_number.faza3_blok1_consumption\n{%
-        elif is_state('sensor.elektro_network_tariff', '2') %}\n  input_number.faza3_blok2_consumption\n{%
-        elif is_state('sensor.elektro_network_tariff', '3') %}\n  input_number.faza3_blok3_consumption\n{%
-        elif is_state('sensor.elektro_network_tariff', '4') %}\n  input_number.faza3_blok4_consumption\n{%
-        elif is_state('sensor.elektro_network_tariff', '5') %}\n  input_number.faza3_blok5_consumption\n{%
-        endif %}\n"
-    data:
-      value: '{{ (states(''sensor.p1_meter_phase_3_mesecno_kwh'')) }}
-
-        '
-    action: input_number.set_value
+  trigger:
+    - platform: state
+      entity_id: sensor.elektro_network_tariff
+  action:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: sensor.elektro_network_tariff
+              state: "1"
+          sequence:
+            - service: select.select_option
+              target:
+                entity_id:
+                  - select.tarife_p1_meter_skupaj_mesecno
+                  - select.tarife_p1_meter_faza1_mesecno
+                  - select.tarife_p1_meter_faza2_mesecno
+                  - select.tarife_p1_meter_faza3_mesecno
+              data:
+                option: '1'
+        - conditions:
+            - condition: state
+              entity_id: sensor.elektro_network_tariff
+              state: "2"
+          sequence:
+            - service: select.select_option
+              target:
+                entity_id:
+                  - select.tarife_p1_meter_skupaj_mesecno
+                  - select.tarife_p1_meter_faza1_mesecno
+                  - select.tarife_p1_meter_faza2_mesecno
+                  - select.tarife_p1_meter_faza3_mesecno
+              data:
+                option: '2'
+        - conditions:
+            - condition: state
+              entity_id: sensor.elektro_network_tariff
+              state: "3"
+          sequence:
+            - service: select.select_option
+              target:
+                entity_id:
+                  - select.tarife_p1_meter_skupaj_mesecno
+                  - select.tarife_p1_meter_faza1_mesecno
+                  - select.tarife_p1_meter_faza2_mesecno
+                  - select.tarife_p1_meter_faza3_mesecno
+              data:
+                option: '3'
+        - conditions:
+            - condition: state
+              entity_id: sensor.elektro_network_tariff
+              state: "4"
+          sequence:
+            - service: select.select_option
+              target:
+                entity_id:
+                  - select.tarife_p1_meter_skupaj_mesecno
+                  - select.tarife_p1_meter_faza1_mesecno
+                  - select.tarife_p1_meter_faza2_mesecno
+                  - select.tarife_p1_meter_faza3_mesecno
+              data:
+                option: '4'
+        - conditions:
+            - condition: state
+              entity_id: sensor.elektro_network_tariff
+              state: "5"
+          sequence:
+            - service: select.select_option
+              target:
+                entity_id:
+                  - select.tarife_p1_meter_skupaj_mesecno
+                  - select.tarife_p1_meter_faza1_mesecno
+                  - select.tarife_p1_meter_faza2_mesecno
+                  - select.tarife_p1_meter_faza3_mesecno
+              data:
+                option: '5'
   mode: single
 ```
 
-Če se še spomnimo nam `sensor.elektro_network_tariff` daje podatke kateri blok je trenutno v uporabi. `input_number.faza3_blokX_consumption` so entitete katerim se bo dodajala vrednost.
+Če se še spomnimo nam `sensor.elektro_network_tariff` daje podatke kateri blok je trenutno v uporabi. `sensor.tarife_p1_meter_skupaj_mesecno_1` je entiteta katera zbira porabo za tekoči mesec skupno vse faze za blok1.
+Kot primer `sensor.tarife_p1_meter_faza3_mesecno_2` je entiteta katera zbira porabo za tekoči mesec 3 faze za blok2. 
+Tako fobimo entitete za skupaj vse faze, vsako fazo posebaj in še po blokih!
 ***************************************************************************************************************************************************************************************
 
 # Sedaj pa še izračun:
-V datoteko sensors.yaml dodajte:
+V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko `elektrika_obracun.yaml` zaradi preglednosti,ker se mi je nabralo že ogromno entitet ki spadajo v skupino senzorjev):
 ```yaml
 #=========================================================================================================================================================
 #                          Obračun elektrike
@@ -307,7 +372,8 @@ V datoteko sensors.yaml dodajte:
         friendly_name: "Skupaj izračun stroška električne energije"
         value_template: >
           {{ (states('sensor.cena_elektricne_energije_et') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "157cc9e7-fa6b-4961-b971-b2a5107aa273"
 #============================================
 # Izračun stroška omrežnine za EE sistem
@@ -374,7 +440,8 @@ V datoteko sensors.yaml dodajte:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 1"
         value_template: >
           {{ (states('sensor.cena_prevzeta_ee_casovni_blok_1') | float(default=0)) * (states('input_number.faza3_blok1_consumption') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "b8677233-fd2b-4d70-96d4-5a0015e1f63f"
 
   - platform: template
@@ -383,7 +450,8 @@ V datoteko sensors.yaml dodajte:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 2"
         value_template: >
           {{ (states('sensor.cena_prevzeta_ee_casovni_blok_2') | float(default=0)) * (states('input_number.faza3_blok2_consumption') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "22653dee-7dff-461a-a05a-ff6093b915cb"
 
   - platform: template
@@ -392,7 +460,8 @@ V datoteko sensors.yaml dodajte:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 3"
         value_template: >
           {{ (states('sensor.cena_prevzeta_ee_casovni_blok_3') | float(default=0)) * (states('input_number.faza3_blok3_consumption') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "7a8d080d-e8db-47e4-9341-79d66f49177a"
 
   - platform: template
@@ -401,7 +470,8 @@ V datoteko sensors.yaml dodajte:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 4"
         value_template: >
           {{ (states('sensor.cena_prevzeta_ee_casovni_blok_4') | float(default=0)) * (states('input_number.faza3_blok4_consumption') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "962ae12e-2784-4600-a775-4afeda115191"
 
   - platform: template
@@ -410,7 +480,8 @@ V datoteko sensors.yaml dodajte:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 5"
         value_template: >
           {{ (states('sensor.cena_prevzeta_ee_casovni_blok_5') | float(default=0)) * (states('input_number.faza3_blok5_consumption') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "16be39c0-048a-40c3-9f59-bee2237b275c"
 #===
 # SKUPAJ
@@ -430,14 +501,16 @@ V datoteko sensors.yaml dodajte:
         friendly_name: "Izračun stroška prispevka za delovanje operaterja trga"
         value_template: >
           {{ (states('cena_prispevka_za_delovanje_operaterja_trga') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "01357d12-b7e9-4b21-b54d-022c059a8811"
 
       izracun_stroska_prispevka_za_energetsko_ucinkovitost:
         friendly_name: "Izračun stroška prispevka za energetsko učinkovitost"
         value_template: >
           {{ (states('sensor.cena_prispevka_za_energetsko_ucinkovitost') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "470278cf-f5b1-4566-b14a-3637e1197bfb"
 
       izracun_stroska_prispevka_za_spte_in_ove:
@@ -462,7 +535,8 @@ V datoteko sensors.yaml dodajte:
         friendly_name: "Skupaj izračun stroška trošarine"
         value_template: >
           {{ (states('sensor.cena_trosarine') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "c4d265d9-c7ce-478d-9f16-8402d14e61cb"
 #============================================
 # Izračun stroška storitve pogodbenega računa
@@ -472,26 +546,30 @@ V datoteko sensors.yaml dodajte:
         value_template: >
           {{ (states('sensor.cena_jederske_energije') | float(default=0)) + (states('sensor.cena_pavsalnih_stroskov') | float(default=0)) - (states('sensor.cena_e_popusta') | float(default=0)) }}
         unit_of_measurement: "EUR"
-        unique_id: "a15e8c65-ac34-4e68-ba1f-81d2052291e8"          
+        unique_id: "a15e8c65-ac34-4e68-ba1f-81d2052291e8"  
+
 #============================================
 # SKUPAJ IZRAČUN
 #============================================
       skupaj_izracun_stroskov:
         friendly_name: "Skupaj izračun stroškov"
         value_template: >
-          {{ (states('skupaj_izracun_stroska_elektricne_energije') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_dogovorjene_moci') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_prevzete_ee') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_trosarine') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna') | float(default=0)) }}
-        unit_of_measurement: "EUR"
+          {{ (states('sensor.skupaj_izracun_stroska_elektricne_energije') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_dogovorjene_moci') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_prevzete_ee') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_trosarine') | float(default=0)) + (states('sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna') | float(default=0)) }}
+        unit_of_measurement: "EUR/kWh"
+        device_class: energy
         unique_id: "c88ba7d9-5e8b-467b-bc50-6c1e452f2c8c"
+
 ```
 Izgled kartice:
 ![Ha-Elektrika](https://github.com/user-attachments/assets/07a0f281-f385-45f2-adf8-0b829fd11cac)
 
-in še te, ki trenutno kaže podatke malo narobe, ker sem entitete dodajal v obratnem vrstnem redu in še to, da niso bile vse narejene isti dan. (Seveda če sem naredil tisti del pravilno v katerega nisem prepričan, ker sem si pomagal z ChatGPT)
-![Izračun porabe](https://github.com/user-attachments/assets/d04696ca-bbc9-4c59-81c4-b8f10af41a23)
+in še te, ki trenutno kaže podatke porabe po fazah, blokih in skupno.
+
+![20250218-Poraba elektrike](https://github.com/user-attachments/assets/b3e5cc94-22f0-4801-ad6f-904d1a61a5f0)
 
 
 
-Zahvaljujem se frlequ https://github.com/frlequ za dodatke! Za vse ki mu želijo donirati https://buymeacoffee.com/frlequ.
+Zahvaljujem se Blažu Česnu, ki mi je nesebično nudil pomoč in frlequ https://github.com/frlequ za dodatke! Za vse ki mu želijo donirati https://buymeacoffee.com/frlequ.
 
 p.s. In še nekaj za vse tiste, ki imate morda preveč časa in ne veste kaj bi z njim! Lotite se izdelave Floor-plan kartice:
 ![20250211-Ha-Fp](https://github.com/user-attachments/assets/dfd50763-70ca-4114-92f7-af82f2ed675a)
