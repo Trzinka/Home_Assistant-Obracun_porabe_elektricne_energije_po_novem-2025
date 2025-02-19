@@ -359,7 +359,7 @@ V `automations.yaml` datoteko dodajmo:
 
 Če se še spomnimo nam `sensor.elektro_network_tariff` daje podatke kateri blok je trenutno v uporabi. `sensor.tarife_p1_meter_skupaj_mesecno_1` je entiteta katera zbira porabo za tekoči mesec skupno vse faze za blok1.
 Kot primer `sensor.tarife_p1_meter_faza3_mesecno_2` je entiteta katera zbira porabo za tekoči mesec 3 faze za blok2. 
-Tako fobimo entitete za skupaj vse faze, vsako fazo posebaj in še po blokih!
+Tako dobimo entitete za skupaj vse faze, vsako fazo posebaj in še po blokih!
 ***************************************************************************************************************************************************************************************
 
 # Sedaj pa še izračun:
@@ -697,6 +697,127 @@ cards:
         color: green
     title: Faza 3
 title: Test
+```
+
+# Za bolj zahtevne še prikaz trenutnih mesečnih stroškov:
+![Izračun elektrike-Tekoči mesec](https://github.com/user-attachments/assets/9eb27bee-4ffd-4a45-bf5b-44dc4c7073a9)
+Še koda kartice:
+```yaml
+type: entities
+entities:
+  - entity: sensor.skupaj_izracun_stroska_elektricne_energije
+    icon: mdi:transmission-tower
+    card_mod:
+      style: |
+        :host {
+          color: #AA0000;
+          }
+  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok1
+    icon: mdi:meter-electric
+    card_mod:
+      style: |
+        :host {
+          color: orange;
+          }
+  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok2
+    icon: mdi:meter-electric
+    card_mod:
+      style: |
+        :host {
+          color: orange;
+          }
+  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok3
+    icon: mdi:meter-electric
+    card_mod:
+      style: |
+        :host {
+          color: orange;
+          }
+  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok4
+    icon: mdi:meter-electric
+    card_mod:
+      style: |
+        :host {
+          color: orange;
+          }
+  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok5
+    icon: mdi:meter-electric
+    card_mod:
+      style: |
+        :host {
+          color: orange;
+          }
+  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok1
+    card_mod:
+      style: |
+        :host {
+          color: yellow;
+          }
+  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok2
+    card_mod:
+      style: |
+        :host {
+          color: yellow;
+          }
+  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok3
+    card_mod:
+      style: |
+        :host {
+          color: yellow;
+          }
+  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok4
+    card_mod:
+      style: |
+        :host {
+          color: yellow;
+          }
+  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok5
+    card_mod:
+      style: |
+        :host {
+          color: yellow;
+          }
+  - entity: sensor.izracun_stroska_prispevka_za_delovanje_operaterja_trga
+    icon: mdi:transmission-tower
+    card_mod:
+      style: |
+        :host {
+          color: #AA0000;
+          }
+  - entity: sensor.izracun_stroska_prispevka_za_energetsko_ucinkovitost
+    icon: mdi:transmission-tower
+    card_mod:
+      style: |
+        :host {
+          color: #AA0000;
+          }
+  - entity: sensor.izracun_stroska_prispevka_za_spte_in_ove
+  - entity: sensor.skupaj_izracun_stroska_trosarine
+    icon: mdi:transmission-tower
+    card_mod:
+      style: |
+        :host {
+          color: #2cff05;
+          }
+  - entity: sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna
+    card_mod:
+      style: |
+        :host {
+          color: rgb(78, 192, 245);
+          }
+        hui-generic-entity-row {
+          border-bottom: 5px solid rgb(78, 192, 245);
+          width: 100%;
+          }
+  - entity: sensor.skupaj_izracun_stroskov
+    icon: mdi:currency-eur
+    card_mod:
+      style: |
+        :host {
+          color: red;
+          font-weight: bold;
+          }
+state_color: false
 ```
 
 Zahvaljujem se Blažu Česnu, ki mi je nesebično nudil pomoč in frlequ https://github.com/frlequ za dodatke! Za vse ki mu želijo donirati https://buymeacoffee.com/frlequ.
