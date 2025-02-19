@@ -90,79 +90,84 @@ Naredil sem tudi svoje senzorje cen v datoteki elektrika_cenik.yaml (mapa `share
       cena_elektricne_energije_et:
         friendly_name: "Cena električne energije ET"
         value_template: "0.077000"
-        unit_of_measurement: "EUR"
+        unit_of_measurement: "EUR/kWh"
         unique_id: "9b434ad5-7c23-4d49-8ffa-a30c17e2084a"
 #============================================
       cena_dogovorjena_moc_casovni_blok_1:
         friendly_name_template: "Cena za dogovorjeno moč za časovni blok 1"
-        value_template: "3.613240"
-        unit_of_measurement: EUR
+        value_template: "0.912240"
+        unit_of_measurement: EUR/kW
         unique_id: 6b53b29d-2234-4dfc-a7ea-34986ad917b7
 
       cena_dogovorjena_moc_casovni_blok_2:
         friendly_name_template: "Cena za dogovorjeno moč za časovni blok 2"
-        value_template: "0.882400"
-        unit_of_measurement: EUR
+        value_template: "0.912240"
+        unit_of_measurement: EUR/kW
         unique_id: 9c9ac06f-e8af-4601-9619-a9ab5a468724
 
       cena_dogovorjena_moc_casovni_blok_3:
         friendly_name_template: "Cena za dogovorjeno moč za časovni blok 3"
-        value_template: "0.191370"
-        unit_of_measurement: EUR
+        value_template: "0.162970"
+        unit_of_measurement: EUR/kW
         unique_id: f88bbc15-0147-40a6-a143-fc26430a1e45
 
       cena_dogovorjena_moc_casovni_blok_4:
         friendly_name_template: "Cena za dogovorjeno moč za časovni blok 4"
-        value_template: "0.013160"
-        unit_of_measurement: EUR
+        value_template: "0.004070"
+        unit_of_measurement: EUR/kW
         unique_id: aa7f86ab-a151-48b8-b395-f1905cc98596
       
       cena_dogovorjena_moc_casovni_blok_5:
         friendly_name_template: "Cena za dogovorjeno moč za časovni blok 5"
         value_template: "0.000000"
-        unit_of_measurement: EUR
+        unit_of_measurement: EUR/kW
         unique_id: 8a395d09-d227-420f-be83-c7e9cf6bf0c1
  #=================    
       cena_prevzeta_ee_casovni_blok_1:
         friendly_name_template: "Cena za prevzeto EE za časovni blok 1"
-        value_template: "0.019580"
-        unit_of_measurement: EUR
+        value_template: "0.019980"
+        unit_of_measurement: EUR/kWh
+        device_class: energy
         unique_id: f56768b8-ae04-420c-b8b4-f4eb60202c70
 
       cena_prevzeta_ee_casovni_blok_2:
         friendly_name_template: "Cena za prevzeto EE za časovni blok 2"
-        value_template: "0.018440"
-        unit_of_measurement: EUR
+        value_template: "0.018330"
+        unit_of_measurement: EUR/kWh
+        device_class: energy
         unique_id: 2593a72f-f6e1-42f5-b957-7c510c6922cc
 
       cena_prevzeta_ee_casovni_blok_3:
         friendly_name_template: "Cena za prevzeto EE za časovni blok 3"
-        value_template: "0.018370"
-        unit_of_measurement: EUR
+        value_template: "0.018090"
+        unit_of_measurement: EUR/kWh
+        device_class: energy
         unique_id: 3431129c-3ee7-4b0b-89be-288a75966bf5
 
       cena_prevzeta_ee_casovni_blok_4:
         friendly_name_template: "Cena za prevzeto EE za časovni blok 4"
-        value_template: "0.018380"
-        unit_of_measurement: EUR
+        value_template: "0.018550"
+        unit_of_measurement: EUR/kWh
+        device_class: energy
         unique_id: 9a3a6150-c0d5-4854-9a3d-e972fed8faa6
 
       cena_prevzeta_ee_casovni_blok_5:
         friendly_name_template: "Cena za prevzeto EE za časovni blok 5"
         value_template: "0.000000"
-        unit_of_measurement: EUR
+        unit_of_measurement: EUR/kWh
+        device_class: energy
         unique_id: be98de2a-a493-4d31-9986-2f109ca4d327
 #============================================
       cena_prispevka_za_delovanje_operaterja_trga:
         friendly_name_template: "Cena prispevka za delovanje operaterja trga"
         value_template: "0.000130"
-        unit_of_measurement: EUR
+        unit_of_measurement: EUR/kWh
         unique_id: 0c975325-7cc9-444b-a28a-323a5158aaab
 
       cena_prispevka_za_energetsko_ucinkovitost:
         friendly_name_template: "Cena prispevka za energetsko učinkovitost"
         value_template: "0.000800"
-        unit_of_measurement: EUR
+        unit_of_measurement: EUR/kWh
         unique_id: 5cbf3c18-87b3-4373-ab6c-26148c5a8c60
 
       cena_prispevka_za_spte_in_ove:
@@ -174,7 +179,7 @@ Naredil sem tudi svoje senzorje cen v datoteki elektrika_cenik.yaml (mapa `share
       cena_trosarine:
         friendly_name_template: "Cena trošarine"
         value_template: "0.001530"
-        unit_of_measurement: EUR
+        unit_of_measurement: EUR/kWh
         unique_id: 5e1bfb3f-d6e2-4f42-b9b9-6789df157e0d
 #============================================
       cena_jederske_energije:
@@ -371,19 +376,21 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       skupaj_izracun_stroska_elektricne_energije:
         friendly_name: "Skupaj izračun stroška električne energije"
         value_template: >
-          {{ (states('sensor.cena_elektricne_energije_et') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_elektricne_energije_et') | float(default=0)) * 
+              (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "157cc9e7-fa6b-4961-b971-b2a5107aa273"
 #============================================
-# Izračun stroška omrežnine za EE sistem
+# Izračun stroška omrežnine za elektroenergetski sistem
 #============================================
   - platform: template
     sensors:
       izracun_stroska_dogovorjene_moci_casovni_blok1:
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 1"
         value_template: >
-          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_1') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_1') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_1') | float(default=0)) * 
+              (states('sensor.moj_elektro_casovni_blok_1') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "a379725a-9627-43da-b2f3-74d5a4d1808b"
 
@@ -392,7 +399,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_dogovorjene_moci_casovni_blok2:
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 2"
         value_template: >
-          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_2') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_2') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_2') | float(default=0)) * 
+              (states('sensor.moj_elektro_casovni_blok_2') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "b1cde06a-4acc-47d3-a49f-265f683f366f"
 
@@ -401,7 +409,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_dogovorjene_moci_casovni_blok3:
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 3"
         value_template: >
-          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_3') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_3') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_3') | float(default=0)) * 
+              (states('sensor.moj_elektro_casovni_blok_3') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "8257ea99-54ea-488d-ae05-453bf55e2a4c"
 
@@ -410,7 +419,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_dogovorjene_moci_casovni_blok4:
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 4"
         value_template: >
-          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_4') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_4') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_4') | float(default=0)) * 
+              (states('sensor.moj_elektro_casovni_blok_4') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "df8d0f0d-4113-4804-b146-c585b60c965d"
 
@@ -419,7 +429,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_dogovorjene_moci_casovni_blok5:
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 5"
         value_template: >
-          {{ (states('sensor.cena_dogovorjena_moc_casovni_blok_5') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_5') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_5') | float(default=0)) * 
+              (states('sensor.moj_elektro_casovni_blok_5') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "0cf92b56-cbb2-46b9-a81d-6eced4160e4e"
 #===
@@ -430,7 +441,11 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       skupaj_izracun_stroska_dogovorjene_moci:
         friendly_name: "Skupaj izračun stroška dogovorjene moči"
         value_template: >
-          {{ (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok1') | float(default=0)) + (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok2') | float(default=0)) + (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok3') | float(default=0)) + (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok4') | float(default=0)) + (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok5') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok1') | float(default=0)) + 
+              (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok2') | float(default=0)) + 
+              (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok3') | float(default=0)) + 
+              (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok4') | float(default=0)) + 
+              (states('sensor.izracun_stroska_dogovorjene_moci_casovni_blok5') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "7d475559-ff86-4ef5-93b6-c3ffb1847a24"        
  #=================  
@@ -439,7 +454,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_prevzete_ee_casovni_blok1:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 1"
         value_template: >
-          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_1') | float(default=0)) * (states('input_number.faza3_blok1_consumption') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_prevzeta_ee_casovni_blok_1') | float(default=0)) * 
+              (states('sensor.tarife_p1_meter_faza3_mesecno_1') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "b8677233-fd2b-4d70-96d4-5a0015e1f63f"
@@ -449,7 +465,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_prevzete_ee_casovni_blok2:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 2"
         value_template: >
-          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_2') | float(default=0)) * (states('input_number.faza3_blok2_consumption') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_prevzeta_ee_casovni_blok_2') | float(default=0)) * 
+              (states('sensor.tarife_p1_meter_faza3_mesecno_2') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "22653dee-7dff-461a-a05a-ff6093b915cb"
@@ -459,7 +476,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_prevzete_ee_casovni_blok3:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 3"
         value_template: >
-          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_3') | float(default=0)) * (states('input_number.faza3_blok3_consumption') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_prevzeta_ee_casovni_blok_3') | float(default=0)) * 
+              (states('sensor.tarife_p1_meter_faza3_mesecno_3') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "7a8d080d-e8db-47e4-9341-79d66f49177a"
@@ -469,7 +487,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_prevzete_ee_casovni_blok4:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 4"
         value_template: >
-          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_4') | float(default=0)) * (states('input_number.faza3_blok4_consumption') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_prevzeta_ee_casovni_blok_4') | float(default=0)) * 
+              (states('sensor.tarife_p1_meter_faza3_mesecno_4') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "962ae12e-2784-4600-a775-4afeda115191"
@@ -479,7 +498,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_prevzete_ee_casovni_blok5:
         friendly_name: "Izračun stroška prevzete EE za časovni blok 5"
         value_template: >
-          {{ (states('sensor.cena_prevzeta_ee_casovni_blok_5') | float(default=0)) * (states('input_number.faza3_blok5_consumption') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_prevzeta_ee_casovni_blok_5') | float(default=0)) * 
+              (states('sensor.tarife_p1_meter_faza3_mesecno_5') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "16be39c0-048a-40c3-9f59-bee2237b275c"
@@ -491,7 +511,11 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       skupaj_izracun_stroska_prevzete_ee:
         friendly_name: "Skupaj izračun stroška prevzete EE"
         value_template: >
-          {{ (states('sensor.izracun_stroska_prevzete_ee_casovni_blok1') | float(default=0)) + (states('sensor.izracun_stroska_prevzete_ee_casovni_blok2') | float(default=0)) + (states('sensor.izracun_stroska_prevzete_ee_casovni_blok3') | float(default=0)) + (states('sensor.izracun_stroska_prevzete_ee_casovni_blok4') | float(default=0)) + (states('sensor.izracun_stroska_prevzete_ee_casovni_blok5') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.izracun_stroska_prevzete_ee_casovni_blok1') | float(default=0)) + 
+              (states('sensor.izracun_stroska_prevzete_ee_casovni_blok2') | float(default=0)) + 
+              (states('sensor.izracun_stroska_prevzete_ee_casovni_blok3') | float(default=0)) + 
+              (states('sensor.izracun_stroska_prevzete_ee_casovni_blok4') | float(default=0)) + 
+              (states('sensor.izracun_stroska_prevzete_ee_casovni_blok5') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "373340f1-c286-4b84-950c-55e3de69acfe" 
 #============================================
@@ -500,7 +524,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_prispevka_za_delovanje_operaterja_trga:
         friendly_name: "Izračun stroška prispevka za delovanje operaterja trga"
         value_template: >
-          {{ (states('cena_prispevka_za_delovanje_operaterja_trga') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_prispevka_za_delovanje_operaterja_trga') | float(default=0)) * 
+              (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "01357d12-b7e9-4b21-b54d-022c059a8811"
@@ -508,7 +533,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_prispevka_za_energetsko_ucinkovitost:
         friendly_name: "Izračun stroška prispevka za energetsko učinkovitost"
         value_template: >
-          {{ (states('sensor.cena_prispevka_za_energetsko_ucinkovitost') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_prispevka_za_energetsko_ucinkovitost') | float(default=0)) * 
+              (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "470278cf-f5b1-4566-b14a-3637e1197bfb"
@@ -516,7 +542,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       izracun_stroska_prispevka_za_spte_in_ove:
         friendly_name: "Izračun stroška prispevka za SPTE in OVE"
         value_template: >
-          {{ (states('sensor.cena_prispevka_za_spte_in_ove') | float(default=0)) * (states('sensor.moj_elektro_casovni_blok_1') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_prispevka_za_spte_in_ove') | float(default=0)) * 
+              (states('sensor.moj_elektro_casovni_blok_1') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "c3a77213-c751-496b-998f-8c3b1782c4c3"
 #===
@@ -525,7 +552,9 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev:
         friendly_name: "Skupaj izračun stroška prispevkov in ostalih dajatev"
         value_template: >
-          {{ (states('sensor.izracun_stroska_prispevka_za_delovanje_operaterja_trga') | float(default=0)) + (states('sensor.izracun_stroska_prispevka_za_energetsko_ucinkovitost') | float(default=0)) + (states('sensor.izracun_stroska_prispevka_za_spte_in_ove') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.izracun_stroska_prispevka_za_delovanje_operaterja_trga') | float(default=0)) + 
+              (states('sensor.izracun_stroska_prispevka_za_energetsko_ucinkovitost') | float(default=0)) + 
+              (states('sensor.izracun_stroska_prispevka_za_spte_in_ove') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "620071a0-8057-4cc0-89bd-7e4c9fe3f44f"
 #============================================
@@ -534,7 +563,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       skupaj_izracun_stroska_trosarine:
         friendly_name: "Skupaj izračun stroška trošarine"
         value_template: >
-          {{ (states('sensor.cena_trosarine') | float(default=0)) * (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_trosarine') | float(default=0)) * 
+              (states('sensor.p1_meter_phase_3_mesecno_kwh') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "c4d265d9-c7ce-478d-9f16-8402d14e61cb"
@@ -544,7 +574,9 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna:
         friendly_name: "Skupaj izračun stroška storitev pogodbenega računa"
         value_template: >
-          {{ (states('sensor.cena_jederske_energije') | float(default=0)) + (states('sensor.cena_pavsalnih_stroskov') | float(default=0)) - (states('sensor.cena_e_popusta') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.cena_jederske_energije') | float(default=0)) + 
+              (states('sensor.cena_pavsalnih_stroskov') | float(default=0)) - 
+              (states('sensor.cena_e_popusta') | float(default=0))) }}
         unit_of_measurement: "EUR"
         unique_id: "a15e8c65-ac34-4e68-ba1f-81d2052291e8"  
 
@@ -554,12 +586,12 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
       skupaj_izracun_stroskov:
         friendly_name: "Skupaj izračun stroškov"
         value_template: >
-          {{ (states('sensor.skupaj_izracun_stroska_elektricne_energije') | float(default=0)) +
-              (states('sensor.skupaj_izracun_stroska_dogovorjene_moci') | float(default=0)) +
-              (states('sensor.skupaj_izracun_stroska_prevzete_ee') | float(default=0)) +
-              (states('sensor.skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev') | float(default=0)) +
-              (states('sensor.skupaj_izracun_stroska_trosarine') | float(default=0)) +
-              (states('sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna') | float(default=0)) }}
+          {{ "%.5f"|format((states('sensor.skupaj_izracun_stroska_elektricne_energije') | float(default=0)) + 
+              (states('sensor.skupaj_izracun_stroska_dogovorjene_moci') | float(default=0)) + 
+              (states('sensor.skupaj_izracun_stroska_prevzete_ee') | float(default=0)) + 
+              (states('sensor.skupaj_izracun_stroska_prispevkov_in_ostalih_dajatev') | float(default=0)) + 
+              (states('sensor.skupaj_izracun_stroska_trosarine') | float(default=0)) + 
+              (states('sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna') | float(default=0))) }}
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         unique_id: "c88ba7d9-5e8b-467b-bc50-6c1e452f2c8c"
@@ -577,10 +609,10 @@ dodajte v datoteko `elektrika_obracun.yaml`
         unit_of_measurement: "EUR/kWh"
         device_class: energy
         value_template: >
-          {{ (states('sensor.cena_elektricne_energije_et') | float(default=0)) + 
+          {{ "%.5f"|format((states('sensor.cena_elektricne_energije_et') | float(default=0)) + 
               (states('sensor.cena_prispevka_za_delovanje_operaterja_trga') | float(default=0)) + 
               (states('sensor.cena_prispevka_za_energetsko_ucinkovitost') | float(default=0)) + 
-              (states('sensor.cena_trosarine') | float(default=0)) }}
+              (states('sensor.cena_trosarine') | float(default=0))) }}
         unique_id: 92d6a7a2-4566-4864-b1f0-6dabad414f6c
 ```
 
