@@ -276,20 +276,23 @@ tarife_p1_meter_faza3_mesecno:
 
 V `automations.yaml` datoteko dodajmo:
 ```yaml
+##########################################
+#       P1 meter
+##########################################
 - id: '1739795608260'
   alias: Izbira_tarif_blokov
   description: ''
-  trigger:
-    - platform: state
-      entity_id: sensor.elektro_network_tariff
-  action:
+  triggers:
+  - entity_id: sensor.elektro_network_tariff
+    trigger: state
+  actions:
     - choose:
         - conditions:
             - condition: state
               entity_id: sensor.elektro_network_tariff
               state: "1"
           sequence:
-            - service: select.select_option
+            - action: select.select_option
               target:
                 entity_id:
                   - select.tarife_p1_meter_skupaj_mesecno
@@ -303,7 +306,7 @@ V `automations.yaml` datoteko dodajmo:
               entity_id: sensor.elektro_network_tariff
               state: "2"
           sequence:
-            - service: select.select_option
+            - action: select.select_option
               target:
                 entity_id:
                   - select.tarife_p1_meter_skupaj_mesecno
@@ -317,7 +320,7 @@ V `automations.yaml` datoteko dodajmo:
               entity_id: sensor.elektro_network_tariff
               state: "3"
           sequence:
-            - service: select.select_option
+            - action: select.select_option
               target:
                 entity_id:
                   - select.tarife_p1_meter_skupaj_mesecno
@@ -331,7 +334,7 @@ V `automations.yaml` datoteko dodajmo:
               entity_id: sensor.elektro_network_tariff
               state: "4"
           sequence:
-            - service: select.select_option
+            - action: select.select_option
               target:
                 entity_id:
                   - select.tarife_p1_meter_skupaj_mesecno
@@ -345,7 +348,7 @@ V `automations.yaml` datoteko dodajmo:
               entity_id: sensor.elektro_network_tariff
               state: "5"
           sequence:
-            - service: select.select_option
+            - action: select.select_option
               target:
                 entity_id:
                   - select.tarife_p1_meter_skupaj_mesecno
@@ -355,6 +358,7 @@ V `automations.yaml` datoteko dodajmo:
               data:
                 option: '5'
   mode: single
+
 ```
 
 Če se še spomnimo nam `sensor.elektro_network_tariff` daje podatke kateri blok je trenutno v uporabi. `sensor.tarife_p1_meter_skupaj_mesecno_1` je entiteta katera zbira porabo za tekoči mesec skupno vse faze za blok1.
