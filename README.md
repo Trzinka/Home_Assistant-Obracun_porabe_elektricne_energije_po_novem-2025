@@ -68,7 +68,7 @@ Glede na zgodovino porabe moči v zimskem času (gretje na elektriko "IR paneli"
 
 na te ocene dogovorjene moči po blokih Elektra si ne upam kaj spreminjati, ker se hitro zgodi trenutek nepazljivosti in se zgodi kot prikazuje zgornja slika.
 ![Moj elektro-Bloki](https://github.com/user-attachments/assets/958c90fb-9e70-47fe-b03d-857318a3b505)
-Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki bi preprečevala istočasen vklop več naprav na enkrat (vse večje porabnike imam opremljene s stikali, ki merijo porabo električne energije) a po pravici ne vem kje začeti in čemu dati prednost tako, da ne preostane nič drugega kot osebna pozornost, da ne vklopim več istočasnih velikih porabnikov električne energije.
+Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki bi preprečevala istočasen vklop več naprav na enkrat (vse večje porabnike imam opremljene s stikali, ki merijo porabo električne energije) a po pravici povedano ne vem kje začeti in čemu dati prednost tako, da ne preostane nič drugega kot osebna pozornost, da ne vklopim istočasno več velikih porabnikov električne energije.
 ***************************************************************************************************************************************************************************************
 
 `Moj elektro dodatek nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si. Podatki v kWh so za en dan nazaj oziroma so včerajšnji:`
@@ -218,14 +218,15 @@ Zatem označite/izberite kot prikazujejo rdeče puščice. Kjer je modra pušči
 
 ***************************************************************************************************************************************************************************************
 
-Sedaj ustvarimo še nov senzor `sensor.p1_meter_phase_3_mesecno_kwh`, ki bo zbiral mesečno porabo električne energije:
+Sedaj ustvarimo še nov senzor `sensor.p1_meter_phase_3_mesecno_kwh` (senzor za 3 fazo), ki bo zbiral mesečno porabo električne energije:
 ![P1 meter phase 3-Mesečno-kWh](https://github.com/user-attachments/assets/1a1a633e-acbf-46a1-8e33-0cf0023738a0)
 Izberi `Utility Meter`
 ![Utility Meter](https://github.com/user-attachments/assets/2018862e-8cf0-4762-92f2-9038787a9479)
-Zatem kjer kaže rdeča puščica izberi `mesečno`,kjer kaže modra puščica iberi senzor, ki ga želiš, dodaj ime in klikni `Submit`
+Zatem kjer kaže rdeča puščica izberi `mesečno`, kjer kaže modra puščica izberi senzor, ki ga želiš, dodaj ime in klikni `Submit`
 ![sensor p1_meter_phase_3_mesecno_kwh](https://github.com/user-attachments/assets/cf14d559-7eea-4091-ad44-6edc1a4e6a44)
 
-Sedaj smo naredili senzor z imenom `sensor.p1_meter_phase_3_mesecno_kwh`, ki ga bomo kasneje uporabljali pri izračunu elektrike.
+Sedaj smo naredili senzor z imenom `sensor.p1_meter_phase_3_mesecno_kwh` (senzor za 3 fazo), ki ga bomo kasneje uporabljali pri izračunu elektrike.
+Isto naredite za preostale faze in skupno.
 
 V `utility_meter.yaml` datoteko dodamo:
 ```yaml
@@ -361,13 +362,13 @@ V `automations.yaml` datoteko dodajmo:
 
 ```
 
-Če se še spomnimo nam `sensor.elektro_network_tariff` daje podatke kateri blok je trenutno v uporabi. `sensor.tarife_p1_meter_skupaj_mesecno_1` je entiteta katera zbira porabo za tekoči mesec skupno vse faze za blok1.
-Kot primer `sensor.tarife_p1_meter_faza3_mesecno_2` je entiteta katera zbira porabo za tekoči mesec 3 faze za blok2. 
-Tako dobimo entitete za skupaj vse faze, vsako fazo posebaj in še po blokih!
+Če se še spomnimo nam `sensor.elektro_network_tariff` daje podatke kateri blok je trenutno v uporabi. `sensor.tarife_p1_meter_skupaj_mesecno_1` je entiteta katera zbira porabo za tekoči mesec skupno vse faze za 1 blok.
+Kot primer `sensor.tarife_p1_meter_faza3_mesecno_2` je entiteta katera zbira porabo za tekoči mesec 3 faze za 2 blok. 
+Tako naredimo entitete za skupaj vse faze, vsako fazo posebaj in še po blokih!
 ***************************************************************************************************************************************************************************************
 
 # Sedaj pa še izračun:
-V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko `elektrika_obracun.yaml` zaradi preglednosti,ker se mi je nabralo že ogromno entitet ki spadajo v skupino senzorjev):
+V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko `elektrika_obracun.yaml` zaradi preglednosti, ker se mi je nabralo že ogromno entitet, ki spadajo v skupino senzorjev):
 ```yaml
 #=========================================================================================================================================================
 #                          Obračun elektrike
@@ -623,7 +624,7 @@ dodajte v datoteko `elektrika_obracun.yaml`
 Izgled kartice:
 ![Ha-Elektrika](https://github.com/user-attachments/assets/07a0f281-f385-45f2-adf8-0b829fd11cac)
 
-in še te, ki trenutno kaže podatke porabe po fazah, blokih in skupno.
+in še te, ki trenutno kaže podatke porabe po fazah (uporabljam samo 2 fazi od treh), blokih in skupno.
 
 ![20250218-Poraba elektrike](https://github.com/user-attachments/assets/b3e5cc94-22f0-4801-ad6f-904d1a61a5f0)
 
@@ -700,7 +701,7 @@ cards:
         icon: mdi:transmission-tower
         color: green
     title: Faza 3
-title: Test
+title: Energija
 ```
 
 # Za bolj zahtevne še prikaz trenutnih mesečnih stroškov:
@@ -826,5 +827,7 @@ state_color: false
 
 Zahvaljujem se Blažu Česnu, ki mi je nesebično nudil pomoč in frlequ https://github.com/frlequ za dodatke! Za vse ki mu želijo donirati https://buymeacoffee.com/frlequ.
 
-p.s. In še nekaj za vse tiste, ki imate morda preveč časa in ne veste kaj bi z njim! Lotite se izdelave Floor-plan kartice:
+p.s. In še nekaj za vse tiste, ki imate morda čas se lotite se izdelave Floor-plan kartice:
 ![20250211-Ha-Fp](https://github.com/user-attachments/assets/dfd50763-70ca-4114-92f7-af82f2ed675a)
+
+https://github.com/ExperienceLovelace/ha-floorplan/discussions/411
