@@ -1,4 +1,4 @@
-V datoteki `configuration.yaml` zaradi boljše preglednosti razčlenite datoteko in vpišite v korenske imeniku naredite ustrezne datoteke:
+V datoteki `configuration.yaml` zaradi boljše preglednosti razčlenite datoteko in vpišite in v korenske imeniku naredite ustrezne datoteke:
 ```yaml
 utility_meter: !include utility_meter.yaml
 automation: !include automations.yaml
