@@ -368,7 +368,8 @@ Tako naredimo entitete za skupaj vse faze, vsako fazo posebaj in še po blokih!
 ***************************************************************************************************************************************************************************************
 
 # Sedaj pa še izračun:
-V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko `elektrika_obracun.yaml` zaradi preglednosti, ker se mi je nabralo že ogromno entitet, ki spadajo v skupino senzorjev):
+Popravljeno 12.03.2025
+V datoteko sensors.yaml dodajte (jaz imam v mapi `share` in podmapi `sensors` sem ustvaril datoteko `elektrika_obracun.yaml` zaradi preglednosti, ker se mi je nabralo že ogromno entitet, ki spadajo v skupino senzorjev kot sem zapisal zgoraj):
 ```yaml
 #=========================================================================================================================================================
 #                          Obračun elektrike
@@ -395,8 +396,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 1"
         value_template: >
           {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_1') | float(default=0)) * 
-              (states('sensor.moj_elektro_casovni_blok_1') | float(default=0))) }}
-        unit_of_measurement: "EUR"
+              (states('sensor.moj_elektro_casovni_blok_1') | float(default=0)) / 2) }}
+        unit_of_measurement: "EUR/kW"
         unique_id: "a379725a-9627-43da-b2f3-74d5a4d1808b"
 
   - platform: template
@@ -405,8 +406,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 2"
         value_template: >
           {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_2') | float(default=0)) * 
-              (states('sensor.moj_elektro_casovni_blok_2') | float(default=0))) }}
-        unit_of_measurement: "EUR"
+              (states('sensor.moj_elektro_casovni_blok_2') | float(default=0)) / 2) }}
+        unit_of_measurement: "EUR/kW"
         unique_id: "b1cde06a-4acc-47d3-a49f-265f683f366f"
 
   - platform: template
@@ -415,8 +416,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 3"
         value_template: >
           {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_3') | float(default=0)) * 
-              (states('sensor.moj_elektro_casovni_blok_3') | float(default=0))) }}
-        unit_of_measurement: "EUR"
+              (states('sensor.moj_elektro_casovni_blok_3') | float(default=0)) / 2) }}
+        unit_of_measurement: "EUR/kW"
         unique_id: "8257ea99-54ea-488d-ae05-453bf55e2a4c"
 
   - platform: template
@@ -425,8 +426,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 4"
         value_template: >
           {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_4') | float(default=0)) * 
-              (states('sensor.moj_elektro_casovni_blok_4') | float(default=0))) }}
-        unit_of_measurement: "EUR"
+              (states('sensor.moj_elektro_casovni_blok_4') | float(default=0)) / 2) }}
+        unit_of_measurement: "EUR/kW"
         unique_id: "df8d0f0d-4113-4804-b146-c585b60c965d"
 
   - platform: template
@@ -435,8 +436,8 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
         friendly_name: "Izračun stroška dogovorjene moči za časovni blok 5"
         value_template: >
           {{ "%.5f"|format((states('sensor.cena_dogovorjena_moc_casovni_blok_5') | float(default=0)) * 
-              (states('sensor.moj_elektro_casovni_blok_5') | float(default=0))) }}
-        unit_of_measurement: "EUR"
+              (states('sensor.moj_elektro_casovni_blok_5') | float(default=0)) / 2) }}
+        unit_of_measurement: "EUR/kW"
         unique_id: "0cf92b56-cbb2-46b9-a81d-6eced4160e4e"
 #===
 # SKUPAJ
@@ -548,7 +549,7 @@ V datoteko sensors.yaml dodajte (jaz imam v mapi `share` mapo `sensors` datoteko
         friendly_name: "Izračun stroška prispevka za SPTE in OVE"
         value_template: >
           {{ "%.5f"|format((states('sensor.cena_prispevka_za_spte_in_ove') | float(default=0)) * 
-              (states('sensor.moj_elektro_casovni_blok_1') | float(default=0))) }}
+              (states('sensor.moj_elektro_casovni_blok_1') | float(default=0)) / 2) }}
         unit_of_measurement: "EUR"
         unique_id: "c3a77213-c751-496b-998f-8c3b1782c4c3"
 #===
@@ -705,124 +706,414 @@ title: Energija
 ```
 
 # Za bolj zahtevne še prikaz trenutnih mesečnih stroškov:
-![Izračun elektrike-Tekoči mesec](https://github.com/user-attachments/assets/9eb27bee-4ffd-4a45-bf5b-44dc4c7073a9)
+Popravljeno/dodano 12.03.2025
+
+![20250312-Izračun porabe elektrike](https://github.com/user-attachments/assets/d5f07f42-ae7c-4b93-a43c-f7c6dc4b3bd6)
+
+Predhodno je potrebno narediti še nekaj entitet, ki prepolovijo strošek blokov. Jaz sem ustvaril datoteko `dogovorjena_moc_polovica.yaml` v mapi `share` in v podmapi `sensors`:
+
+```yaml
+- platform: template
+  sensors:
+    moj_elektro_casovni_blok_1_polovica:
+      friendly_name: "Moj Elektro Casovni Blok 1 Polovica"
+      unit_of_measurement: "kW"
+      device_class: power
+      value_template: "{{ states('sensor.moj_elektro_casovni_blok_1') | float / 2 }}"
+      unique_id: 4525ad63-7144-4ba8-95f6-7aa649b3879c
+
+- platform: template
+  sensors:
+    moj_elektro_casovni_blok_2_polovica:
+      friendly_name: "Moj Elektro Casovni Blok 2 Polovica"
+      unit_of_measurement: "kW"
+      device_class: power
+      value_template: "{{ states('sensor.moj_elektro_casovni_blok_2') | float / 2 }}"
+      unique_id: 4301a898-a54c-411c-ba1a-1759e8f0676d
+
+- platform: template
+  sensors:
+    moj_elektro_casovni_blok_3_polovica:
+      friendly_name: "Moj Elektro Casovni Blok 3 Polovica"
+      unit_of_measurement: "kW"
+      device_class: power
+      value_template: "{{ states('sensor.moj_elektro_casovni_blok_3') | float / 2 }}"
+      unique_id: 38be6300-1de6-4a0c-a24e-b78abbcb6dfb
+
+- platform: template
+  sensors:
+    moj_elektro_casovni_blok_4_polovica:
+      friendly_name: "Moj Elektro Casovni Blok 4 Polovica"
+      unit_of_measurement: "kW"
+      device_class: power
+      value_template: "{{ states('sensor.moj_elektro_casovni_blok_4') | float / 2 }}"
+      unique_id: 9b0c24d9-e872-479b-81a1-d2df008e2162
+
+- platform: template
+  sensors:
+    moj_elektro_casovni_blok_5_polovica:
+      friendly_name: "Moj Elektro Casovni Blok 5 Polovica"
+      unit_of_measurement: "kW"
+      device_class: power
+      value_template: "{{ states('sensor.moj_elektro_casovni_blok_5') | float / 2 }}"
+      unique_id: c17ef3b7-63bd-499a-a57d-08b870b11414
+```
+
 Še koda kartice:
 ```yaml
-type: entities
-entities:
-  - entity: sensor.skupaj_izracun_stroska_elektricne_energije
-    icon: mdi:transmission-tower
-    card_mod:
-      style: |
-        :host {
-          color: #AA0000;
-          }
-  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok1
-    icon: mdi:meter-electric
-    card_mod:
-      style: |
-        :host {
-          color: orange;
-          }
-  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok2
-    icon: mdi:meter-electric
-    card_mod:
-      style: |
-        :host {
-          color: orange;
-          }
-  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok3
-    icon: mdi:meter-electric
-    card_mod:
-      style: |
-        :host {
-          color: orange;
-          }
-  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok4
-    icon: mdi:meter-electric
-    card_mod:
-      style: |
-        :host {
-          color: orange;
-          }
-  - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok5
-    icon: mdi:meter-electric
-    card_mod:
-      style: |
-        :host {
-          color: orange;
-          }
-  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok1
-    card_mod:
-      style: |
-        :host {
-          color: yellow;
-          }
-  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok2
-    card_mod:
-      style: |
-        :host {
-          color: yellow;
-          }
-  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok3
-    card_mod:
-      style: |
-        :host {
-          color: yellow;
-          }
-  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok4
-    card_mod:
-      style: |
-        :host {
-          color: yellow;
-          }
-  - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok5
-    card_mod:
-      style: |
-        :host {
-          color: yellow;
-          }
-  - entity: sensor.izracun_stroska_prispevka_za_delovanje_operaterja_trga
-    icon: mdi:transmission-tower
-    card_mod:
-      style: |
-        :host {
-          color: #AA0000;
-          }
-  - entity: sensor.izracun_stroska_prispevka_za_energetsko_ucinkovitost
-    icon: mdi:transmission-tower
-    card_mod:
-      style: |
-        :host {
-          color: #AA0000;
-          }
-  - entity: sensor.izracun_stroska_prispevka_za_spte_in_ove
-  - entity: sensor.skupaj_izracun_stroska_trosarine
-    icon: mdi:transmission-tower
-    card_mod:
-      style: |
-        :host {
-          color: #2cff05;
-          }
-  - entity: sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna
-    card_mod:
-      style: |
-        :host {
-          color: rgb(78, 192, 245);
-          }
-        hui-generic-entity-row {
-          border-bottom: 5px solid rgb(78, 192, 245);
-          width: 100%;
-          }
-  - entity: sensor.skupaj_izracun_stroskov
-    icon: mdi:currency-eur
-    card_mod:
-      style: |
-        :host {
-          color: red;
-          font-weight: bold;
-          }
-state_color: false
+type: horizontal-stack
+cards:
+  - type: entities
+    entities:
+      - entity: sensor.cena_elektricne_energije_et
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.cena_dogovorjena_moc_casovni_blok_1
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.cena_dogovorjena_moc_casovni_blok_2
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.cena_dogovorjena_moc_casovni_blok_3
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.cena_dogovorjena_moc_casovni_blok_4
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.cena_dogovorjena_moc_casovni_blok_5
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.cena_prevzeta_ee_casovni_blok_1
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.cena_prevzeta_ee_casovni_blok_2
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.cena_prevzeta_ee_casovni_blok_3
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.cena_prevzeta_ee_casovni_blok_4
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.cena_prevzeta_ee_casovni_blok_5
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.cena_prispevka_za_delovanje_operaterja_trga
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.cena_prispevka_za_energetsko_ucinkovitost
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.cena_prispevka_za_spte_in_ove
+        icon: none
+        name: .
+      - entity: sensor.cena_trosarine
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: #2cff05;
+              }
+    state_color: false
+  - type: entities
+    entities:
+      - entity: sensor.p1_meter_phase_3_mesecno_kwh
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.moj_elektro_casovni_blok_1_polovica
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.moj_elektro_casovni_blok_2_polovica
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.moj_elektro_casovni_blok_3_polovica
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.moj_elektro_casovni_blok_4_polovica
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.moj_elektro_casovni_blok_5_polovica
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.tarife_p1_meter_faza3_mesecno_1
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.tarife_p1_meter_faza3_mesecno_2
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.tarife_p1_meter_faza3_mesecno_3
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.tarife_p1_meter_faza3_mesecno_4
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.tarife_p1_meter_faza3_mesecno_5
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.p1_meter_phase_3_mesecno_kwh
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.p1_meter_phase_3_mesecno_kwh
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.moj_elektro_casovni_blok_1_polovica
+        icon: none
+        name: .
+      - entity: sensor.p1_meter_phase_3_mesecno_kwh
+        icon: none
+        name: .
+        card_mod:
+          style: |
+            :host {
+              color: #2cff05;
+              }
+    state_color: false
+  - type: entities
+    entities:
+      - entity: sensor.skupaj_izracun_stroska_elektricne_energije
+        icon: mdi:transmission-tower
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok1
+        icon: mdi:meter-electric
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok2
+        icon: mdi:meter-electric
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok3
+        icon: mdi:meter-electric
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok4
+        icon: mdi:meter-electric
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.izracun_stroska_dogovorjene_moci_casovni_blok5
+        icon: mdi:meter-electric
+        card_mod:
+          style: |
+            :host {
+              color: orange;
+              }
+      - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok1
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok2
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok3
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok4
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.izracun_stroska_prevzete_ee_casovni_blok5
+        card_mod:
+          style: |
+            :host {
+              color: yellow;
+              }
+      - entity: sensor.izracun_stroska_prispevka_za_delovanje_operaterja_trga
+        icon: mdi:transmission-tower
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.izracun_stroska_prispevka_za_energetsko_ucinkovitost
+        icon: mdi:transmission-tower
+        card_mod:
+          style: |
+            :host {
+              color: #AA0000;
+              }
+      - entity: sensor.izracun_stroska_prispevka_za_spte_in_ove
+      - entity: sensor.skupaj_izracun_stroska_trosarine
+        icon: mdi:transmission-tower
+        card_mod:
+          style: |
+            :host {
+              color: #2cff05;
+              }
+      - entity: sensor.skupaj_izracun_stroska_storitev_storitev_pogodbenega_racuna
+        card_mod:
+          style: |
+            :host {
+              color: rgb(78, 192, 245);
+              }
+            hui-generic-entity-row {
+              border-bottom: 5px solid rgb(78, 192, 245);
+              width: 100%;
+              }
+      - entity: sensor.skupaj_izracun_stroskov
+        icon: mdi:currency-eur
+        card_mod:
+          style: |
+            :host {
+              color: red;
+              font-weight: bold;
+              }
+    state_color: false
 ```
 
 Zahvaljujem se Blažu Česnu, ki mi je nesebično nudil pomoč in frlequ https://github.com/frlequ za dodatke! Za vse ki mu želijo donirati https://buymeacoffee.com/frlequ.
