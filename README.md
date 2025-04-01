@@ -11,7 +11,7 @@ sensor: !include_dir_merge_list share/sensors/
 ```
 ![Mapa sensors](https://github.com/user-attachments/assets/00a0f1b5-1c65-4c7d-96d2-643dc7ea3cf3)
 
-Uporabljam nasledne add-on:
+Uporabljam nasledne HACS add-on:
 - https://github.com/frlequ/homeassistant-mojelektro
 - https://github.com/frlequ/home-assistant-network-tariff
 - https://github.com/frlequ/energy-and-tariff-costs
@@ -59,7 +59,7 @@ in še senzor:
         unique_id: c9214188-d611-400c-99df-3b1ce45622ae
 ```
 
-poleg teh uporabljam še vizualni add.on:
+poleg teh uporabljam še vizualni HACS add.on:
 - https://github.com/frlequ/network-tariff-card
 
 ***************************************************************************************************************************************************************************************
@@ -68,7 +68,10 @@ Glede na zgodovino porabe moči v zimskem času (gretje na elektriko "IR paneli"
 
 na te ocene dogovorjene moči po blokih Elektra si ne upam kaj spreminjati, ker se hitro zgodi trenutek nepazljivosti in se zgodi kot prikazuje zgornja slika.
 ![Moj elektro-Bloki](https://github.com/user-attachments/assets/958c90fb-9e70-47fe-b03d-857318a3b505)
-Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki bi preprečevala istočasen vklop več naprav na enkrat (vse večje porabnike imam opremljene s stikali, ki merijo porabo električne energije) a po pravici povedano ne vem kje začeti in čemu dati prednost tako, da ne preostane nič drugega kot osebna pozornost, da ne vklopim istočasno več velikih porabnikov električne energije.
+Razmišljal sem tudi o tem, da bi naredil avtomatizacijo oziroma neko logiko, ki bi preprečevala istočasen vklop več naprav istočasno (vse večje porabnike imam opremljene s pametnimi merilniki porabe elektrike in stikali, ki tudi prikazujejo trenutno porabo električne energije, nekaj jih imam pa, ki kažejo samo porabo in so brez stikala "pri nakupu bodite pozorni, da ima naprava tudi stikalo, če vam je pomembo. Za večje porabnike vsekakor svetujem le te").
+Pri pralnem, sušilnem in pomivalnem stroju in pečici nam ne preostane nič drugega kot osebna pozornost, da ne vklopim istočasno več velikih porabnikov električne energije.
+Lahko bi naredili neko avtomatizacijo tudi za te naprave a nastane problem, da po isklopu elektrike te naprave ne znajo samodejno nadaljevati kjer so končale brez našega fizičnega posredovanja!
+
 ***************************************************************************************************************************************************************************************
 
 `Moj elektro dodatek nudi naslednje podatke, ki jih dobiva direktno iz spleta https://mojelektro.si. Podatki v kWh so za en dan nazaj oziroma so včerajšnji:`
