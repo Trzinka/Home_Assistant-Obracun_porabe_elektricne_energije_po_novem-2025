@@ -1121,6 +1121,8 @@ cards:
 
 Zahvaljujem se Blažu Česnu, ki mi je nesebično nudil pomoč in frlequ https://github.com/frlequ za dodatke! Za vse ki mu želijo donirati https://buymeacoffee.com/frlequ.
 
+
+***************************************************************************************************************************************************************************************
 p.s. In še nekaj za vse tiste, ki imate morda čas se lotite izdelave Floor-plan kartice:
 ![20250211-Ha-Fp](https://github.com/user-attachments/assets/dfd50763-70ca-4114-92f7-af82f2ed675a)
 
