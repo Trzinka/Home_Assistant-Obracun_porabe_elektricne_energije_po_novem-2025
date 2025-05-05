@@ -1127,3 +1127,8 @@ p.s. In še nekaj za vse tiste, ki imate morda čas se lotite izdelave Floor-pla
 ![20250211-Ha-Fp](https://github.com/user-attachments/assets/dfd50763-70ca-4114-92f7-af82f2ed675a)
 
 https://github.com/ExperienceLovelace/ha-floorplan/discussions/411
+
+
+# 📜 Licenca  
+Ta dela so prosto dostopna za vsako uporabo brez omejitev.  
+Avtor ne zahteva atribucije, vendar je hvaležen za povratne informacije.
