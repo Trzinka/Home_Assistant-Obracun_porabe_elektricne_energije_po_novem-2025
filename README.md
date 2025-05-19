@@ -1,3 +1,7 @@
+## 📜 Licenca  
+Ta dela so prosto dostopna za vsako uporabo brez omejitev.  
+Avtor ne zahteva atribucije, vendar je hvaležen za povratne informacije.
+
 V datoteki `configuration.yaml` zaradi boljše preglednosti razčlenite datoteko in vpišite in v korenske imeniku naredite ustrezne datoteke:
 ```yaml
 utility_meter: !include utility_meter.yaml
